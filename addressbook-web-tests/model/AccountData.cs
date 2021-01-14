@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebAddressbookTests
 {
-    class AccountData
+    public class AccountData
     {
         private string username;
         private string password;
@@ -19,26 +19,14 @@ namespace WebAddressbookTests
 
         public string Username
         {
-            get
-            {
-                return username;
-            }
-            set
-            {
-                username = value;
-            }
+            get => username;
+            set => username = value;
         }
 
         public string Password
         {
-            get
-            {
-                return password;
-            }
-            set
-            {
-                password = value;
-            }
+            get => password;
+            set => password = value;
         }
 
     }

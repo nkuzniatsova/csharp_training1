@@ -1,82 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Support.UI;
 
 namespace WebAddressbookTests
 {
-    [TestFixture]
-    public class ContactCreationTests : TestBase
+    public class ContactHelper : HelperBase
     {
-        private IWebDriver driver;
-        private StringBuilder verificationErrors;
-        private string baseURL;
-        private bool acceptNextAlert = true;
-
-        [SetUp]
-        public void SetupTest()
+           public ContactHelper(IWebDriver driver) : base(driver)
         {
-            driver = new ChromeDriver();
-            baseURL = "https://www.google.com/";
-            verificationErrors = new StringBuilder();
         }
 
-        [TearDown]
-        public void TeardownTest()
+        public void InitContactCreation()
         {
-            try
-            {
-                driver.Quit();
-            }
-            catch (Exception)
-            {
-                // Ignore errors if unable to close the browser
-            }
-            Assert.AreEqual("", verificationErrors.ToString());
+            driver.FindElement(By.LinkText("add new")).Click();
         }
 
-        [Test]
-        public void ContactCreationTest()
-        {
-            GoToLoginPage();
-            Login(new AccountData("admin", "secret"));
-            InitContactCreation();
-            ContactData contact = new ContactData("Firstname1");
-            contact.Middlename = "Middlename1";
-            contact.Nickname = "Nickname1";
-            contact.Lastname = "Lastname1";
-            contact.Title = "Title1";
-            contact.Company = "Company1";
-            contact.Address = "Test street 100";
-            contact.Home = "0111111111";
-            contact.Mobile = "0222222222";
-            contact.Work = "03333333333";
-            contact.Fax = "04444444444";
-            contact.Email = "Email1";
-            contact.Email2 = "Email2";
-            contact.Email3 = "Email3";
-            contact.Homepage = "http://Homepage.nl";
-            contact.Bday = "10";
-            contact.Bmonth = "January";
-            contact.Byear = "2001";
-            contact.Aday = "20";
-            contact.Amonth = "June";
-            contact.Ayear = "2021";
-            contact.Address2 = "Address2";
-            contact.Phone2 = "0222222222";
-            contact.Notes = "Notes create Contact1";
-
-            FillContactForm(contact);
-            SubmitContactCreation();
-            ReturnToHomePage();
-        }
-
-        private void FillContactForm(ContactData contact)
+        public void FillContactForm(ContactData contact)
         {
             driver.FindElement(By.Name("firstname")).Click();
             driver.FindElement(By.Name("firstname")).Clear();
@@ -155,83 +102,9 @@ namespace WebAddressbookTests
             driver.FindElement(By.Name("notes")).SendKeys(contact.Notes);
         }
 
-        private void SubmitContactCreation()
+        public void SubmitContactCreation()
         {
             driver.FindElement(By.XPath("(//input[@name='submit'])[2]")).Click();
-        }
-
-        private void ReturnToHomePage()
-        {
-            driver.FindElement(By.LinkText("home page")).Click();
-        }
-
-        private void InitContactCreation()
-        {
-            driver.FindElement(By.LinkText("add new")).Click();
-        }
-
-        private void GoToLoginPage()
-        {
-            driver.Navigate().GoToUrl("http://localhost/addressbook/");
-        }
-
-        private void Login(AccountData account)
-        {
-            driver.FindElement(By.Name("user")).Click();
-            driver.FindElement(By.Name("user")).Clear();
-            driver.FindElement(By.Name("user")).SendKeys(account.Username);
-            driver.FindElement(By.Name("pass")).Click();
-            driver.FindElement(By.Name("pass")).Clear();
-            driver.FindElement(By.Name("pass")).SendKeys(account.Password);
-            driver.FindElement(By.XPath("//input[@value='Login']")).Click();
-        }
-
-        private bool IsElementPresent(By by)
-        {
-            try
-            {
-                driver.FindElement(by);
-                return true;
-            }
-            catch (NoSuchElementException)
-            {
-                return false;
-            }
-        }
-
-        private bool IsAlertPresent()
-        {
-            try
-            {
-                driver.SwitchTo().Alert();
-                return true;
-            }
-            catch (NoAlertPresentException)
-            {
-                return false;
-            }
-        }
-
-        private string CloseAlertAndGetItsText()
-        {
-            try
-            {
-                IAlert alert = driver.SwitchTo().Alert();
-                string alertText = alert.Text;
-                if (acceptNextAlert)
-                {
-                    alert.Accept();
-                }
-                else
-                {
-                    alert.Dismiss();
-                }
-                return alertText;
-            }
-            finally
-            {
-                acceptNextAlert = true;
-            }
         }
     }
 }
