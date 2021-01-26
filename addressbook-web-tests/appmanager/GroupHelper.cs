@@ -31,12 +31,30 @@ namespace WebAddressbookTests
         public GroupHelper Modify(int v, GroupData newData)
         {
             manager.Navigator.GoToGroupsPage();
+            if (! IsAnyGroupExist())
+            {
+                Create(CreateNewGroupData());
+            }
             SelectGroup(v);
             InitGroupModification();
             FillGroupForm(newData);
             SubmitGroupModification();
             ReturnToGroupsPage();
             return this;
+
+        }
+
+        private GroupData CreateNewGroupData()
+        {
+            GroupData group = new GroupData("AddFirstGroup");
+            group.Header = "FirstGroupHeader";
+            group.Footer = "FirstGroupFooter";
+            return group;
+        }
+
+        private bool IsAnyGroupExist()
+        {
+            return IsElementPresent(By.XPath("(//input[@name='selected[]'][1])"));
         }
 
         public GroupHelper InitGroupModification()
@@ -58,16 +76,10 @@ namespace WebAddressbookTests
         }
 
         public GroupHelper FillGroupForm(GroupData group)
-        {
-            driver.FindElement(By.Name("group_name")).Click();
-            driver.FindElement(By.Name("group_name")).Clear();
-            driver.FindElement(By.Name("group_name")).SendKeys(group.Name);
-            driver.FindElement(By.Name("group_header")).Click();
-            driver.FindElement(By.Name("group_header")).Clear();
-            driver.FindElement(By.Name("group_header")).SendKeys(group.Header);
-            driver.FindElement(By.Name("group_footer")).Click();
-            driver.FindElement(By.Name("group_footer")).Clear();
-            driver.FindElement(By.Name("group_footer")).SendKeys(group.Footer);
+        {           
+            Type(By.Name("group_name"), group.Name);
+            Type(By.Name("group_header"), group.Header);
+            Type(By.Name("group_footer"), group.Footer);            
             return this;
         }
 
@@ -98,6 +110,10 @@ namespace WebAddressbookTests
         public GroupHelper Remove(int v)
         {
             manager.Navigator.GoToGroupsPage();
+            if (!IsAnyGroupExist())
+            {
+                Create(CreateNewGroupData());
+            }            
             SelectGroup(1);
             RemoveGroup();
             ReturnToGroupsPage();
