@@ -69,49 +69,16 @@ namespace WebAddressbookTests
         }
         public ContactHelper Modify(int i, ContactData newData)
         {
-            manager.Navigator.GoToHomePage();
-            if (! IsAnyContactExist())
-            {
-                Create(CreateContactData());
-            }            
+            manager.Navigator.GoToHomePage();            
             SelectContact(i);
             InitContactModification(i);
             FillContactForm(newData);
             SubmitContactModification();
             ReturnToHomePage();
             return this;
-        }
+        }        
 
-        private ContactData CreateContactData()
-        {
-            ContactData contact = new ContactData("FirstContact");
-            contact.Middlename = "Middlename1";
-            contact.Nickname = "Nickname1";
-            contact.Lastname = "Lastname1";
-            contact.Title = "Title1";
-            contact.Company = "Company1";
-            contact.Address = "Test street 100";
-            contact.Home = "0111111111";
-            contact.Mobile = "0222222222";
-            contact.Work = "03333333333";
-            contact.Fax = "04444444444";
-            contact.Email = "Email1";
-            contact.Email2 = "Email2";
-            contact.Email3 = "Email3";
-            contact.Homepage = "http://Homepage.nl";
-            contact.Bday = "10";
-            contact.Bmonth = "January";
-            contact.Byear = "2001";
-            contact.Aday = "20";
-            contact.Amonth = "June";
-            contact.Ayear = "2021";
-            contact.Address2 = "Address2";
-            contact.Phone2 = "0222222222";
-            contact.Notes = "Notes create Contact1";
-            return contact;
-        }
-
-        private bool IsAnyContactExist()
+        public bool IsAnyContactExist()
         {
             return IsElementPresent(By.XPath("(//input[@name='selected[]'][1])"));
         }
@@ -149,11 +116,7 @@ namespace WebAddressbookTests
 
         public ContactHelper Remove(int i)
         {
-            manager.Navigator.GoToHomePage();
-            if (!IsAnyContactExist())
-            {
-                Create(CreateContactData());
-            }
+            manager.Navigator.GoToHomePage();           
             SelectContact(i);
             RemoveContact();
             return this;

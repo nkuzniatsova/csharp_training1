@@ -13,6 +13,13 @@ namespace WebAddressbookTests
         [Test]
         public void GroupModificationTest()
         {
+            if (!app.Groups.IsAnyGroupExist())
+            {
+                GroupData group = new GroupData("AddFirstGroup");
+                group.Header = "FirstGroupHeader";
+                group.Footer = "FirstGroupFooter";
+                app.Groups.Create(group);
+            }
             GroupData newData = new GroupData("Edit group1");
             newData.Header = null;
             newData.Footer = null;
