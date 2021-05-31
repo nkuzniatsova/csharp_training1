@@ -41,7 +41,15 @@ namespace WebAddressbookTests
                 contact.Notes = "Notes create Contact1";
                 app.Contacts.Create(contact);
             }
+
+            List<ContactData> oldContacts = app.Contacts.GetContactList();
             app.Contacts.Remove(1);
+            List<ContactData> newContacts = app.Contacts.GetContactList();
+
+            oldContacts.RemoveAt(0);
+            oldContacts.Sort();
+            newContacts.Sort();
+            Assert.AreEqual(oldContacts, newContacts);
         }
     }
 }

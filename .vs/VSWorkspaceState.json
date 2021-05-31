@@ -1,6 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\addressbook-web-tests",
+    "\\addressbook-web-tests\\model"
   ],
+  "SelectedNode": "\\addressbook-web-tests",
   "PreviewInSolutionExplorer": false
 }

@@ -58,6 +58,24 @@ namespace WebAddressbookTests
             return this;
         }
 
+        public List<ContactData> GetContactList()
+        {
+            List<ContactData> contacts = new List<ContactData>();
+            manager.Navigator.GoToHomePage();
+            ICollection<IWebElement> elements = driver.FindElements(By.XPath("//table/tbody/tr[@name='entry']"));
+            //ICollection<IWebElement> elements = driver.FindElements(By.XPath("//input[@name='selected[]']"));             
+            int i = 0;
+            foreach (IWebElement element in elements)            
+            {                
+                string firstName = driver.FindElements(By.XPath("//table/tbody/tr[@name='entry']/td[3]"))[i].Text;
+                string lastName = driver.FindElements(By.XPath("//table/tbody/tr[@name='entry']/td[2]"))[i].Text;                
+                ContactData contact = new ContactData(firstName, lastName);
+                contacts.Add(contact);
+                i++;                
+            }
+            return contacts;
+        }
+
         public ContactHelper Create(ContactData contact)
         {
             manager.Navigator.GoToHomePage();
@@ -80,6 +98,7 @@ namespace WebAddressbookTests
 
         public bool IsAnyContactExist()
         {
+            manager.Navigator.GoToHomePage();
             return IsElementPresent(By.XPath("(//input[@name='selected[]'][1])"));
         }
 
