@@ -15,7 +15,8 @@ namespace WebAddressbookTests
 {
     public class ContactHelper : HelperBase
     {
-           public ContactHelper(ApplicationManager manager) : base(manager)
+        private List<ContactData> contactCache = null;
+        public ContactHelper(ApplicationManager manager) : base(manager)
         {
         }
 
@@ -60,20 +61,34 @@ namespace WebAddressbookTests
 
         public List<ContactData> GetContactList()
         {
-            List<ContactData> contacts = new List<ContactData>();
-            manager.Navigator.GoToHomePage();
-            ICollection<IWebElement> elements = driver.FindElements(By.XPath("//table/tbody/tr[@name='entry']"));
-            //ICollection<IWebElement> elements = driver.FindElements(By.XPath("//input[@name='selected[]']"));             
-            int i = 0;
-            foreach (IWebElement element in elements)            
-            {                
-                string firstName = driver.FindElements(By.XPath("//table/tbody/tr[@name='entry']/td[3]"))[i].Text;
-                string lastName = driver.FindElements(By.XPath("//table/tbody/tr[@name='entry']/td[2]"))[i].Text;                
-                ContactData contact = new ContactData(firstName, lastName);
-                contacts.Add(contact);
-                i++;                
+            if (contactCache == null)
+            {
+                contactCache = new List<ContactData>();
+                manager.Navigator.GoToHomePage();
+                ICollection<IWebElement> elements = driver.FindElements(By.XPath("//table/tbody/tr[@name='entry']"));
+                //ICollection<IWebElement> elements = driver.FindElements(By.XPath("//input[@name='selected[]']"));             
+                int i = 0;
+                foreach (IWebElement element in elements)
+                {
+                    string firstName = driver.FindElements(By.XPath("//table/tbody/tr[@name='entry']/td[3]"))[i].Text;
+                    string lastName = driver.FindElements(By.XPath("//table/tbody/tr[@name='entry']/td[2]"))[i].Text;
+                    
+                    ContactData contact = new ContactData(firstName, lastName)
+                    {
+                        Id = driver.FindElements(By.XPath("//table/tbody/tr[@name='entry']/td[1]/input"))[i].GetAttribute("value")
+
+                    };
+                    contactCache.Add(contact);
+                    i++;
+                }
             }
-            return contacts;
+           
+            return new List<ContactData>(contactCache);
+        }
+
+        public int GetContactCount()
+        {
+            return driver.FindElements(By.XPath("//table/tbody/tr[@name='entry']")).Count;
         }
 
         public ContactHelper Create(ContactData contact)
@@ -105,12 +120,13 @@ namespace WebAddressbookTests
         private ContactHelper SubmitContactModification()
         {
             driver.FindElement(By.XPath("(//input[@name='update'])[1]")).Click();
+            contactCache = null;
             return this;
         }
 
         private ContactHelper SelectContact(int index)
         {
-            driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + index + "]")).Click();
+            driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + (index) + "]")).Click();
             return this;
         }
 
@@ -124,6 +140,7 @@ namespace WebAddressbookTests
         public ContactHelper SubmitContactCreation()
         {
             driver.FindElement(By.XPath("(//input[@name='submit'])[1]")).Click();
+            contactCache = null;
             return this;
         }
 
@@ -137,7 +154,7 @@ namespace WebAddressbookTests
         {
             manager.Navigator.GoToHomePage();           
             SelectContact(i);
-            RemoveContact();
+            RemoveContact();         
             return this;
         }
 
@@ -146,6 +163,7 @@ namespace WebAddressbookTests
             acceptNextAlert = true;
             driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
             Assert.IsTrue(Regex.IsMatch(CloseAlertAndGetItsText(), "^Delete 1 addresses[\\s\\S]$"));
+            contactCache = null;
             return this;
         }
 

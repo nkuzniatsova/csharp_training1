@@ -13,10 +13,8 @@ namespace WebAddressbookTests
             this.Firstname = firstname;
             this.Lastname = lastname;
         }
-        public ContactData(string firstname)
-        {
-            this.Firstname = firstname;           
-        }
+        
+        public string Id { get; set; }
         public string Firstname { get; set; }
         public string Middlename { get; set; } = "";
         public string Lastname { get; set; } = "";
