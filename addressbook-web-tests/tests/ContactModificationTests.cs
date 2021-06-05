@@ -23,9 +23,9 @@ namespace WebAddressbookTests
                 contact.Title = "Title1";
                 contact.Company = "Company1";
                 contact.Address = "Test street 100";
-                contact.Home = "0111111111";
-                contact.Mobile = "0222222222";
-                contact.Work = "03333333333";
+                contact.HomePhone = "0111111111";
+                contact.MobilePhone = "0222222222";
+                contact.WorkPhone = "03333333333";
                 contact.Fax = "04444444444";
                 contact.Email = "Email1";
                 contact.Email2 = "Email2";
@@ -49,9 +49,9 @@ namespace WebAddressbookTests
             newData.Title = "Title modified";
             newData.Company = "Company modified";
             newData.Address = "Test street 200";
-            newData.Home = "0111111112";
-            newData.Mobile = "0222222223";
-            newData.Work = "03333333334";
+            newData.HomePhone = "0111111112";
+            newData.MobilePhone = "0222222223";
+            newData.WorkPhone = "03333333334";
             newData.Fax = "04444444445";
             newData.Email = "Email11";
             newData.Email2 = "Email21";
@@ -70,7 +70,7 @@ namespace WebAddressbookTests
             List<ContactData> oldContacts = app.Contacts.GetContactList();
             ContactData oldData = oldContacts[0];
 
-            app.Contacts.Modify(1, newData);
+            app.Contacts.Modify(0, newData);
 
             Assert.AreEqual(oldContacts.Count, app.Contacts.GetContactCount());
 

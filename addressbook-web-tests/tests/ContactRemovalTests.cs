@@ -23,9 +23,9 @@ namespace WebAddressbookTests
                 contact.Title = "Title1";
                 contact.Company = "Company1";
                 contact.Address = "Test street 100";
-                contact.Home = "0111111111";
-                contact.Mobile = "0222222222";
-                contact.Work = "03333333333";
+                contact.HomePhone = "0111111111";
+                contact.MobilePhone = "0222222222";
+                contact.WorkPhone = "03333333333";
                 contact.Fax = "04444444444";
                 contact.Email = "Email1";
                 contact.Email2 = "Email2";

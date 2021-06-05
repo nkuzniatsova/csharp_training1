@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace WebAddressbookTests
 {
     public class ContactData : IEquatable<ContactData>, IComparable<ContactData>
     {
+        private string allPhones;
+        private string allEmails;
+
         public ContactData(string firstname, string lastname)
         {
             this.Firstname = firstname;
@@ -22,9 +26,9 @@ namespace WebAddressbookTests
         public string Title { get; set; } = "";
         public string Company { get; set; } = "";
         public string Address { get; set; } = "";
-        public string Home { get; set; } = "";
-        public string Mobile { get; set; } = "";
-        public string Work { get; set; } = "";
+        public string HomePhone { get; set; } = "";
+        public string MobilePhone { get; set; } = "";
+        public string WorkPhone { get; set; } = "";
         public string Fax { get; set; } = "";
         public string Email { get; set; } = "";
         public string Email2 { get; set; } = "";
@@ -39,6 +43,48 @@ namespace WebAddressbookTests
         public string Address2 { get; set; } = "";
         public string Phone2 { get; set; } = "";
         public string Notes { get; set; } = "";
+        public string AllPhones {
+            get {
+                if (allPhones != null)
+                {
+                    return allPhones;
+                }
+                else
+                {
+                    return (CleanUp(HomePhone) + CleanUp(MobilePhone) + CleanUp(WorkPhone) + CleanUp(Phone2)).Trim();
+                }
+            }
+            set {
+                allPhones = value;
+            }
+        }
+        public string AllEmails
+        {
+            get
+            {
+                if (allEmails != null)
+                {
+                    return allEmails;
+                }
+                else
+                {
+                    return (Email + "\r\n" + Email2 + "\r\n" + Email3 + "\r\n").Trim();
+                }
+            }
+            set{
+                allEmails = value;
+            }
+        }
+
+        private string CleanUp(string phone)
+        {
+            if (phone == null || phone == "")
+            {
+                return "";
+            }
+            return Regex.Replace(phone, "[ -()]", "") + "\r\n";
+            //return phone.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "") + "\r\n";
+        }
 
         public bool Equals(ContactData other)
         {
